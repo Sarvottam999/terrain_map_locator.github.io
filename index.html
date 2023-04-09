@@ -10,22 +10,23 @@
 
       <h1> map view</h1>
       <div id = "map" style = "width: 900px; height: 580px"></div>
-      <script>
-         // Creating map options
-         var mapOptions = {
-            center: [16.506174, 80.648015],
-            zoom: 7
-         }
-         var map = new L.map('map', mapOptions);    // Creating a map object
-         
-         // Creating a Layer object
-         var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-         map.addLayer(layer); // Adding layer to the map
-         
-         map.on("click", function(e){
-            new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-         })
-      </script>
+      
    </body>
+   <script>
+      // Creating map options
+      var mapOptions = {
+         center: [16.506174, 80.648015],
+         zoom: 7
+      }
+      var map = new L.map('map', mapOptions);    // Creating a map object
+      
+      // Creating a Layer object
+      var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+      map.addLayer(layer); // Adding layer to the map
+      
+      map.on("click", function(e){
+         new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+      })
+   </script>
    
 </html>
