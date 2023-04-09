@@ -2,8 +2,12 @@
 <html>
    <head>
       <title>Leaflet Polygons</title>
-      <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/>
-      <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+      <!-- <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/> -->
+      <link type="text/css" rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+      
+      <script src = "https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+      <!-- <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script> -->
    </head>
    
    <body>
@@ -15,7 +19,7 @@
    <script>
       // Creating map options
       var mapOptions = {
-         center: [16.506174, 80.648015],
+         center: [30.247251, 75.851197 ],
          zoom: 7
       }
       var map = new L.map('map', mapOptions);    // Creating a map object
