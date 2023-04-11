@@ -1,36 +1,152 @@
 <!DOCTYPE html>
-<html>
-   <head>
-      <title>Leaflet Polygons</title>
-      <!-- <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css"/> -->
-      <link type="text/css" rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-      
-      <script src = "https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<html lang="en">
 
-      <!-- <script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script> -->
-   </head>
-   
-   <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <link rel="stylesheet" href="./style.css">
+    <title>Map</title>
+</head>
 
-      <h1> map view</h1>
-      <div id = "map" style = "width: 900px; height: 580px"></div>
-      
-   </body>
-   <script>
-      // Creating map options
-      var mapOptions = {
-         center: [30.247251, 75.851197 ],
-         zoom: 7
-      }
-      var map = new L.map('map', mapOptions);    // Creating a map object
-      
-      // Creating a Layer object
-      var layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-      map.addLayer(layer); // Adding layer to the map
-      
-      map.on("click", function(e){
-         new L.Marker([e.latlng.lat, e.latlng.lng]).addTo(map);
-      })
-   </script>
-   
+<body>
+    <main>
+        <div class="store-list">
+ 
+            <div class="heading">    <!-- /////////      heading       -->
+                <h2>Add</h2>
+            </div>
+            <label for="lat-input">Latitude:</label>
+    <input type="number" id="lat-input" step="0.000001"   />
+
+    <br />
+
+    <label for="lng-input">Longitude:</label>
+    <input type="number" id="lng-input" step="0.000001"   />
+
+    <br /><br /><br /><br /><br /> 
+
+    <button class="btn success" onclick="addPoint()">Add Point</button> <br> <br> <br><br /><br />
+    <button class="btn danger" onclick="placeLen()">see length</button><br> <br> <br>
+    <div id="len"></div>
+
+
+
+            <ul class="list">     <!-- /////////      list       -->
+            </ul>
+        </div>
+        <div id="map"></div>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+        <script>
+            let points = [];
+            let geoJsonArray = [];
+    
+            let map = L.map('map').setView([15.2993, 74.1240], 10);
+    
+            // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            //     maxZoom: 18
+            // }).addTo(map);
+
+            L.tileLayer('http://{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}',{
+                    maxZoom: 20,
+                    subdomains:['mt0','mt1','mt2','mt3']
+                }).addTo(map);
+    
+            // Create a Leaflet GeoJSON layer and add it to the map
+let geoJsonLayer = L.geoJSON(null, {
+  onEachFeature: function(feature, layer) {
+    // Add a click event listener to each feature to remove it from the array and the layer when clicked
+    layer.on('click', function() {
+      geoJsonArray.splice(geoJsonArray.indexOf(feature), 1);
+      geoJsonLayer.removeLayer(layer);
+    });
+  }
+}).addTo(map);
+
+
+                    function onMapClick(e) {
+                        let latlng = e.latlng;
+                        let newFeature = {
+                            type: 'Feature',
+                            geometry: {
+                                type: 'Point',
+                                coordinates: [latlng.lng, latlng.lat]
+                            },
+                            properties: {
+                                name: 'New Point'
+                            }
+                        };
+                        geoJsonArray.push(newFeature);
+                        geoJsonLayer.addData(newFeature);
+                        console.log(newFeature);
+                    }
+
+                function addPoint2(arr) {
+                    // let latlng = e.latlng;
+                    // let newFeature = {
+                    //     type: 'Feature',
+                    //     geometry: {
+                    //         type: 'Point',
+                    //         coordinates: arr
+                    //     },
+                    //     properties: {
+                    //         name: 'New Point'
+                    //     }
+                    // };
+                    // geoJsonArray.push(newFeature);
+                    // geoJsonLayer.addData(newFeature);
+                    // console.log(newFeature);
+
+                }
+
+
+            function addPoint() {
+                let lat = Number(document.getElementById('lat-input').value);
+                let lng = Number(document.getElementById('lng-input').value);
+                if (!isNaN(lat) && !isNaN(lng)) {
+                    let myArray = [lng,lat];
+                    let newFeature = {
+                        type: 'Feature',
+                        geometry: {
+                            type: 'Point',
+                            coordinates:  myArray
+                        },
+                        properties: {
+                            name: 'New Point'
+                        }
+                    };
+                    geoJsonArray.push(newFeature);
+                    geoJsonLayer.addData(newFeature);
+                    console.log(newFeature);
+                    // addPoint2(myArray)
+                    // let marker = L.marker([lat, lng]).addTo(map);
+                    // map.fitBounds(points);
+                }
+            }
+
+            map.on('click', onMapClick);
+
+            function placeLen( ) {
+                document.getElementById('len').innerHTML = geoJsonArray.length;
+                
+                
+            }
+
+        </script>
+    <!-- <script src="./stores.js"></script>
+    <script src="./app.js"></script> -->
+</body>
+
 </html>
+
+<!-- 30.210644, 75.692096 -->
